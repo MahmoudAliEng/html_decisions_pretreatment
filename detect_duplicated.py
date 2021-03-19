@@ -1,23 +1,22 @@
-
+import hashlib
 from os import walk
-from json import dump
 
-folder = 'data\\cleaned 10-03-2021\\'
+def md5(fname):
+    hash_md5 = hashlib.md5()
+    with open(fname, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
 
-def detect_duplicated_decisions():
-    _, _, filenames = next(walk(folder))
-    duplicated = {}
-    for filename in filenames:
-        f = open(folder + filename, 'r')
-        file_content = f.read()
-        f.close()
-        for filename2 in filenames:
-            if (filename != filename2):
-                f2 = open(folder + filename, 'r')
-                file_content2 = f2.read()
-                f2.close()
-                if (file_content2 == file_content and filename not in duplicated):
-                    duplicated[filename] = filename2
-    print(len(duplicated))
-    with open(folder + '\\duplicated_files.json', 'w', encoding='utf-8') as f:
-        dump(duplicated, f, indent=4)
+folder = 'data\\2021-03-19 article 1147\\cleaned\\'
+_, _, filenames = next(walk(folder))
+files_hashes = dict()
+
+for filename in filenames:
+    file_hash = md5(folder + filename)
+    if file_hash not in files_hashes:
+        files_hashes[file_hash] = filename
+    else :
+        print(f'{filename} is duplicated with {files_hashes[file_hash]}')
+
+print(len(files_hashes))
