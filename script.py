@@ -14,8 +14,11 @@ for i in range(1,len(argv)):
         file_content = f.read()
         f.close()
         soup = BeautifulSoup(file_content , features="html.parser")
-        div = soup.find("div", {"id": "jurisprudence"})
-        content = str(div.get_text())
+        try:
+            div = soup.find("div", {"id": "jurisprudence"})
+            content = str(div.get_text())
+        except Exception as e:
+            print(filename)
         f = open(output_folder + filename.split('.')[0] +'.txt', 'w', encoding='utf-8')
         f.write(content)
         f.close()
