@@ -18,15 +18,16 @@ if __name__ == '__main__':
     # create file handler which logs even debug messages, default mode is a (create if not exists and append)
     fh = logging.FileHandler('script.log')
     fh.setLevel(logging.DEBUG)
+
     # create console handler with a higher log level
     ch = logging.StreamHandler()
     ch.setLevel(logging.ERROR)
     
     # create formatter and add it to the handlers
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s') #%(name)s => logger name
     ch.setFormatter(formatter)
     fh.setFormatter(formatter)
-    
+
     # add the handlers to the logger
     logger.addHandler(ch)
     logger.addHandler(fh)
@@ -34,7 +35,7 @@ if __name__ == '__main__':
     # Converting to text files
     for i in range(1,len(argv)):
         folder = 'data\\'+argv[i]+'\\'
-        logger.info('Treating {} folder...'.format(folder))
+        logger.info('\n\n##########\tTreating {} folder...\t##########\n'.format(folder))
         output_folder = folder + 'cleaned\\'
         if not exists(output_folder):
             makedirs(output_folder)
@@ -67,7 +68,7 @@ if __name__ == '__main__':
             if file_hash not in files_hashes:
                 files_hashes[file_hash] = filename
             else :
-                logger.warning(f'\n{filename} is duplicated with {files_hashes[file_hash]}')
+                logger.warning(f'{filename} is duplicated with {files_hashes[file_hash]}')
                 remove(folder + filename)
 
-        logger.info(f'This folder {folder} contains {len(files_hashes)} files now')
+        logger.info(f'\n\n\tThis folder {folder} contains {len(files_hashes)} files now')
